@@ -3,6 +3,7 @@ import { CustomError } from './custom-error';
 
 /**
  * Class representing an error occurring when user passes invalid request parameters.
+ * Handles output errors from 'express-validator'
  */
 export class RequestValidationError extends CustomError {
   statusCode = 400;
