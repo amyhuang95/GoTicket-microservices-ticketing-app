@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator'; // to validate email and password
 import { User } from '../models/user';
 import { RequestValidationError } from '../errors/request-validation-error';
+import { BadRequestError } from '../errors/bad-request-error';
 
 const router = express.Router();
 
@@ -27,8 +28,7 @@ router.post(
     // Check whether the email already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      console.log('Email in use.');
-      return res.send({});
+      throw new BadRequestError('Email in use');
     }
 
     // Create new user and save to MongoDB
