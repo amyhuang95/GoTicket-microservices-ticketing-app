@@ -20,17 +20,29 @@ interface UserDoc extends mongoose.Document {
 }
 
 // Defines Mongoose user model
-const userSchema = new mongoose.Schema({
-  // define data type using mongoose language (not TypeScript!)
-  email: {
-    type: String,
-    required: true,
+const userSchema = new mongoose.Schema(
+  {
+    // define data type using mongoose language (not TypeScript!)
+    email: {
+      type: String,
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
   },
-  password: {
-    type: String,
-    required: true,
-  },
-});
+  {
+    toJSON: {
+      transform(doc, ret) {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.password;
+        delete ret.__v;
+      },
+    },
+  }
+);
 
 // Hash the password before saving
 userSchema.pre('save', async function (done) {
