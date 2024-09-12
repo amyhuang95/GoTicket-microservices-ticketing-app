@@ -20,7 +20,8 @@ app.use(
     // disable encryption in the cookie
     signed: false,
     // require cookie only be used if user is visiting on https connection
-    secure: true,
+    // set secure to true when it's in dev/prod environment
+    secure: process.env.NODE_ENV !== 'test',
   })
 );
 

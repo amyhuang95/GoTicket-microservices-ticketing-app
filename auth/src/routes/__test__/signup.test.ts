@@ -76,3 +76,18 @@ it('disallow duplicate emails', async () => {
     })
     .expect(400);
 });
+
+// Test creation of cookie after successful signup
+// expect return 201 status code
+it('sets a cookie after successful signup', async () => {
+  const response = request(app)
+    .post('/api/users/signup')
+    .send({
+      email: 'test@test.com',
+      password: 'password',
+    })
+    .expect(201);
+
+  // Inspect the header in the response
+  expect(response.get('Set-Cookie')).toBeDefined();
+});
