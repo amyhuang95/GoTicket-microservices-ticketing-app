@@ -80,7 +80,7 @@ it('disallow duplicate emails', async () => {
 // Test creation of cookie after successful signup
 // expect return 201 status code
 it('sets a cookie after successful signup', async () => {
-  const response = request(app)
+  const response = await request(app)
     .post('/api/users/signup')
     .send({
       email: 'test@test.com',
