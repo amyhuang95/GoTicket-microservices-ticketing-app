@@ -6,6 +6,10 @@ let mongo: any;
 
 // Hook that will run before all tests - connect to the in-memory db server
 beforeAll(async () => {
+  // Set up env var
+  process.env.JWT_KEY = 'asdf';
+
+  // connect to server
   mongo = await MongoMemoryServer.create();
   const mongoUri = mongo.getUri();
   await mongoose.connect(mongoUri, {});
