@@ -3,17 +3,7 @@ import { app } from '../../app';
 
 // Valid case
 it('responds with details of current user', async () => {
-  // create a user
-  const authResponse = await request(app)
-    .post('/api/users/signup')
-    .send({
-      email: 'test@test.com',
-      password: 'password',
-    })
-    .expect(201);
-
-  // extract cookie from the auth response
-  const cookie = authResponse.get('Set-Cookie');
+  const cookie = await global.signin();
 
   // make request to current user
   const response = await request(app)
@@ -23,4 +13,14 @@ it('responds with details of current user', async () => {
     .expect(200);
 
   expect(response.body.currentUser.email).toEqual('test@test.com');
+});
+
+// Invalid case - responds null if not authenticated
+it('responds with null if not authenticated', async () => {
+  const response = await request(app)
+    .get('/api/users/currentuser')
+    .send()
+    .expect(200);
+
+  expect(response.body.currentUser).toEqual(null);
 });
