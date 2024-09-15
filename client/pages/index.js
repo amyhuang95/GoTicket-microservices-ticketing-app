@@ -12,8 +12,8 @@ const LandingPage = ({ currentUser }) => {
 // Fetch data during server-side rendering process
 LandingPage.getInitialProps = async (context) => {
   const client = buildClient(context);
-  const response = await client.get('/api/users/currentuser');
-  return response.data;
+  const { data } = await client.get('/api/users/currentuser');
+  return data;
 };
 
 export default LandingPage;
