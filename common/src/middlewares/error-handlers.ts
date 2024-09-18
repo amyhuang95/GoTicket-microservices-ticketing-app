@@ -23,6 +23,7 @@ export const errorHandler = (
   }
 
   // Otherwise, it sends a generic error response.
+  console.log(err); // log the err in console for debugging
   res.status(400).send({
     errors: [{ message: 'Something went wrong' }],
   });
