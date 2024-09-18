@@ -1,13 +1,14 @@
 import request from 'supertest';
 import { app } from '../../app';
-import { response } from 'express';
-
+import mongoose from 'mongoose';
 /**
  * Tests to verify the functionality of show ticket router.
  */
 
 it('returns a 404 if the ticket is not found', async () => {
-  await request(app).get('/api/tickets/random_id').send().expect(404);
+  // generate a random valid id for mongo db
+  const id = new mongoose.Types.ObjectId().toHexString();
+  await request(app).get(`/api/tickets/${id}`).send().expect(404);
 });
 
 it('returns the ticket if the ticket is found', async () => {
