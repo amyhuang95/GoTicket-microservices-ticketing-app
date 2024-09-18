@@ -4,7 +4,6 @@ import { NotFoundError } from '@goticket/common';
 
 /**
  * Router to show a ticket.
- * Validate the title and price of the ticket before storing it in MongoDB.
  */
 
 const router = express.Router();
