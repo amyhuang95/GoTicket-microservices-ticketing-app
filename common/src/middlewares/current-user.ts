@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 
 // Define UserPayload properties
 interface UserPayload {
-  id: String;
+  id: string;
   email: string;
 }
 
