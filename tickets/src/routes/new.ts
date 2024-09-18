@@ -3,11 +3,13 @@ import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { Ticket } from '../models/ticket';
 
-const router = express.Router();
 /**
  * Router to create a new ticket.
  * Validate the title and price of the ticket before storing it in MongoDB.
  */
+
+const router = express.Router();
+
 router.post(
   '/api/tickets',
   requireAuth,
