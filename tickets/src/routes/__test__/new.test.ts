@@ -2,6 +2,10 @@ import request from 'supertest';
 import { app } from '../../app';
 import { Ticket } from '../../models/ticket';
 
+/**
+ * Tests to verify functionality of the create ticket router.
+ */
+
 it('has a route handler listening to /api/tickets for post requests', async () => {
   const response = await request(app).post('/api/tickets').send({});
 
