@@ -19,20 +19,9 @@ stan.on('connect', async () => {
       id: '123',
       title: 'concert',
       price: 20,
+      userId: 'abc',
     });
   } catch (err) {
     console.error(err);
   }
-
-  // // Information in Nats is exchanged in the form of a string
-  // const data = JSON.stringify({
-  //   id: '123',
-  //   title: 'concert',
-  //   price: 20,
-  // });
-
-  // // Publish the event
-  // stan.publish('ticket:created', data, () => {
-  //   console.log('Event published');
-  // });
 });
