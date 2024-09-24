@@ -8,6 +8,8 @@ import {
   validateRequest,
 } from '@goticket/common';
 import { Ticket } from '../models/ticket';
+import { TicketUpdatedPublisher } from '../events/publishers/ticket-updated-publisher';
+import { natsWrapper } from '../nats-wrapper';
 
 /**
  * Router to update a ticket
@@ -45,6 +47,15 @@ router.put(
       price: req.body.price,
     });
     await ticket.save();
+
+    // Publish event to NATS: ticket:updated
+    new TicketUpdatedPublisher(natsWrapper.client).publish({
+      id: ticket.id,
+      title: ticket.title,
+      price: ticket.price,
+      userId: ticket.userId,
+      version: 0, // to update
+    });
 
     res.send(ticket);
   }
