@@ -4,12 +4,14 @@ import request from 'supertest';
 import { app } from '../app';
 import jwt from 'jsonwebtoken';
 
-let mongo: any;
-
 declare global {
   var signin: () => string[];
 }
 
+// Mock the nats-wrapper
+jest.mock('../nats-wrapper');
+
+let mongo: any;
 // Hook that will run before all tests - connect to the in-memory db server
 beforeAll(async () => {
   // Set up env var
@@ -23,6 +25,8 @@ beforeAll(async () => {
 
 // Hook that will run before each test - reset data in each table
 beforeEach(async () => {
+  // Reset all mocks
+  jest.clearAllMocks();
   const collections = await mongoose.connection.db?.collections();
 
   for (let collection of collections!) {

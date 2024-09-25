@@ -1,6 +1,7 @@
 import request from 'supertest';
 import { app } from '../../app';
 import mongoose from 'mongoose';
+import { natsWrapper } from '../../nats-wrapper';
 
 /**
  * Tests for functionality of updating a ticket.
@@ -114,4 +115,31 @@ it('updates the ticket provided valid inputs', async () => {
 
   expect(ticketResponse.body.title).toEqual('event b');
   expect(ticketResponse.body.price).toEqual(5);
+});
+
+it('publishes an event', async () => {
+  // keep track of the user
+  const cookie = global.signin();
+
+  // Create a ticket
+  const response = await request(app)
+    .post('/api/tickets')
+    .set('Cookie', cookie)
+    .send({
+      title: 'event a',
+      price: 10,
+    });
+
+  // edit the ticket with valid title and price
+  await request(app)
+    .put(`/api/tickets/${response.body.id}`)
+    .set('Cookie', cookie)
+    .send({
+      title: 'event b',
+      price: 5,
+    })
+    .expect(200);
+
+  // Check if the event is published
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
 });
