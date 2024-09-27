@@ -1,9 +1,18 @@
 import mongoose from 'mongoose';
 import express, { Request, Response } from 'express';
-import { requireAuth, validateRequest } from '@goticket/common';
+import {
+  BadRequestError,
+  NotFoundError,
+  requireAuth,
+  validateRequest,
+} from '@goticket/common';
 import { body } from 'express-validator';
+import { Ticket } from '../models/ticket';
+import { Order, OrderStatus } from '../models/orders';
 
 const router = express.Router();
+
+const EXPIRATION_WINDOW_SECONDS = 15 * 60; // 15 minutes * 60 seconds
 
 router.post(
   '/api/orders',
@@ -17,7 +26,36 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    res.send({});
+    // Find the ticket the user is trying to buy in the database
+    const { ticketId } = req.body;
+    const ticket = await Ticket.findById(ticketId);
+
+    if (!ticket) {
+      throw new NotFoundError();
+    }
+
+    // Make sure that this ticket is not already reserved by other users
+    const isReserved = await ticket.isReserved();
+    if (isReserved) {
+      throw new BadRequestError('Ticket is already reserved');
+    }
+
+    // Calculate an expiration date for this order
+    const expiration = new Date();
+    expiration.setSeconds(expiration.getSeconds() + EXPIRATION_WINDOW_SECONDS); // 15 minutes from now
+
+    // Build the order and save it to the database
+    const order = Order.build({
+      userId: req.currentUser!.id,
+      status: OrderStatus.Created,
+      expiresAt: expiration,
+      ticket: ticket,
+    });
+    await order.save();
+
+    // Publish an event saying that an order was created
+
+    res.status(201).send(order);
   }
 );
 
