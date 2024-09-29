@@ -5,6 +5,8 @@ import {
   requireAuth,
 } from '@goticket/common';
 import { Order, OrderStatus } from '../models/orders';
+import { OrderCancelledPublisher } from '../events/publishers/order-cancelled-publisher';
+import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
 
@@ -15,8 +17,8 @@ router.delete(
     // Find the order id
     const { orderId } = req.params;
 
-    // Find the order
-    const order = await Order.findById(orderId);
+    // Find the order and associated ticket
+    const order = await Order.findById(orderId).populate('ticket');
 
     // Check if the order exists
     if (!order) {
@@ -33,6 +35,12 @@ router.delete(
     await order.save();
 
     // Publish an event that the order was cancelled
+    new OrderCancelledPublisher(natsWrapper.client).publish({
+      id: order.id,
+      ticket: {
+        id: order.ticket.id,
+      },
+    });
 
     res.status(204).send(order);
   }
