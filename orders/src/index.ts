@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import { app } from './app';
 import { natsWrapper } from './nats-wrapper';
+import { TicketCreatedListener } from './events/listeners/ticket-created-listener';
+import { TicketUpdatedListener } from './events/listeners/ticket-updated-listener';
 
 const start = async () => {
   // Check environment variable is defined
@@ -20,8 +22,8 @@ const start = async () => {
     throw new Error('NATS_CLUSTER_ID must be defined');
   }
 
-  // Connect to Nats and MongoDB instance
   try {
+    // Connect to NATS
     await natsWrapper.connect(
       process.env.NATS_CLUSTER_ID,
       process.env.NATS_CLIENT_ID,
@@ -34,6 +36,11 @@ const start = async () => {
     process.on('SIGINT', () => natsWrapper.client.close());
     process.on('SIGTERM', () => natsWrapper.client.close());
 
+    // Create listeners
+    new TicketCreatedListener(natsWrapper.client).listen();
+    new TicketUpdatedListener(natsWrapper.client).listen();
+
+    // Connect to MongoDB
     await mongoose.connect(process.env.MONGO_URI);
     console.log('Connected to MongoDB');
   } catch (err) {
