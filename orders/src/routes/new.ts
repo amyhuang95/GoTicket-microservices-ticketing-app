@@ -61,6 +61,7 @@ router.post(
       status: order.status,
       userId: order.userId,
       expiresAt: order.expiresAt.toISOString(), // use UTC time to avoid timezone issues
+      version: order.version,
       ticket: {
         id: ticket.id,
         price: ticket.price,
