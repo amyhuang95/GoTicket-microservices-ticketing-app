@@ -12,6 +12,7 @@ interface TicketDoc extends mongoose.Document {
   price: number;
   userId: string;
   version: number;
+  orderId?: string; // order id is optional
 }
 
 interface TicketModel extends mongoose.Model<TicketDoc> {
@@ -31,6 +32,10 @@ const ticketSchema = new mongoose.Schema(
     userId: {
       type: String,
       required: true,
+    },
+    // Use order id to indicate current ticket is being locked
+    orderId: {
+      type: String,
     },
   },
   {
