@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { app } from '../app';
 import {
+  BadRequestError,
   NotAuthorizedError,
   NotFoundError,
   requireAuth,
@@ -34,6 +35,11 @@ router.put(
     // if the ticket does not exist, throw error
     if (!ticket) {
       throw new NotFoundError();
+    }
+
+    // If the ticket has been reserved
+    if (ticket.orderId) {
+      throw new BadRequestError('Cannot edit a reserved ticket.');
     }
 
     // If the user who requests edits does not own the ticket

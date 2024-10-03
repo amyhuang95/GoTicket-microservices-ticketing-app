@@ -2,6 +2,7 @@ import request from 'supertest';
 import { app } from '../../app';
 import mongoose from 'mongoose';
 import { natsWrapper } from '../../nats-wrapper';
+import { Ticket } from '../../models/ticket';
 
 /**
  * Tests for functionality of updating a ticket.
@@ -142,4 +143,32 @@ it('publishes an event', async () => {
 
   // Check if the event is published
   expect(natsWrapper.client.publish).toHaveBeenCalled();
+});
+
+it('rejects update if the ticket is reserved', async () => {
+  // keep track of the user
+  const cookie = global.signin();
+
+  // Create a ticket
+  const response = await request(app)
+    .post('/api/tickets')
+    .set('Cookie', cookie)
+    .send({
+      title: 'event a',
+      price: 10,
+    });
+
+  const ticket = await Ticket.findById(response.body.id);
+  ticket?.set({ orderId: new mongoose.Types.ObjectId().toHexString() });
+  await ticket!.save();
+
+  // edit the ticket with valid title and price
+  await request(app)
+    .put(`/api/tickets/${response.body.id}`)
+    .set('Cookie', cookie)
+    .send({
+      title: 'event b',
+      price: 5,
+    })
+    .expect(400);
 });
