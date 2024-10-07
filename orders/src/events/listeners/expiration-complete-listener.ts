@@ -6,7 +6,7 @@ import {
 } from '@goticket/common';
 import { queueGroupName } from './queue-group-name';
 import { Message } from 'node-nats-streaming';
-import { Order } from '../../models/orders';
+import { Order } from '../../models/order';
 import { OrderCancelledPublisher } from '../publishers/order-cancelled-publisher';
 import { natsWrapper } from '../../nats-wrapper';
 

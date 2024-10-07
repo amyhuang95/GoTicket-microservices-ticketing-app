@@ -4,7 +4,7 @@ import {
   NotFoundError,
   requireAuth,
 } from '@goticket/common';
-import { Order } from '../models/orders';
+import { Order } from '../models/order';
 
 const router = express.Router();
 

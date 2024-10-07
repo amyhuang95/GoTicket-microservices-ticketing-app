@@ -4,7 +4,7 @@ import {
   NotFoundError,
   requireAuth,
 } from '@goticket/common';
-import { Order, OrderStatus } from '../models/orders';
+import { Order, OrderStatus } from '../models/order';
 import { OrderCancelledPublisher } from '../events/publishers/order-cancelled-publisher';
 import { natsWrapper } from '../nats-wrapper';
 

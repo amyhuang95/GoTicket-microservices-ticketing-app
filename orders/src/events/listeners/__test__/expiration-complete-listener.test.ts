@@ -3,7 +3,7 @@ import { Message } from 'node-nats-streaming';
 import { OrderStatus, ExpirationCompleteEvent } from '@goticket/common';
 import { ExpirationCompleteListener } from '../expiration-complete-listener';
 import { natsWrapper } from '../../../nats-wrapper';
-import { Order } from '../../../models/orders';
+import { Order } from '../../../models/order';
 import { Ticket } from '../../../models/ticket';
 
 const setup = async () => {
