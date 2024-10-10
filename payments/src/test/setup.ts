@@ -43,13 +43,10 @@ afterAll(async () => {
 });
 
 // Global function only accessible to test for signing up and extracting cookie
-global.signin = () => {
-  // Generate a random valid id
-  const id = new mongoose.Types.ObjectId().toHexString();
-
+global.signin = (id?: string) => {
   // Build a JWT payload {id, email}
   const payload = {
-    id,
+    id: id || new mongoose.Types.ObjectId().toHexString(),
     email: 'test@test.com',
   };
 
