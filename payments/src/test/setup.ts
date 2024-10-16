@@ -11,6 +11,9 @@ declare global {
 // Mock the nats-wrapper
 jest.mock('../nats-wrapper');
 
+// Define Strip api key
+process.env.STRIPE_KEY = '[STRIPE_KEY]';
+
 let mongo: any;
 // Hook that will run before all tests - connect to the in-memory db server
 beforeAll(async () => {
