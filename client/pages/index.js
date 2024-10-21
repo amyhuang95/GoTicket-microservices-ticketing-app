@@ -1,5 +1,6 @@
 // Generate components with provided data
-const LandingPage = ({ currentUser }) => {
+const LandingPage = ({ currentUser, tickets }) => {
+  console.log(tickets);
   return currentUser ? (
     <h1>You are signed in</h1>
   ) : (
@@ -9,7 +10,9 @@ const LandingPage = ({ currentUser }) => {
 
 // Fetch data during server-side rendering process
 LandingPage.getInitialProps = async (context, client, currentUser) => {
-  return {};
+  const { data } = await client.get('/api/tickets');
+
+  return { tickets: data };
 };
 
 export default LandingPage;
