@@ -20,13 +20,6 @@ const NewTicket = () => {
     onSuccess: () => Router.push('/'), // redirect to home page after success
   });
 
-  // handle form submission
-  const onSubmit = (event) => {
-    event.preventDefault();
-    // make a request to the server
-    doRequest();
-  };
-
   // auto-format numbers to 2 decimals
   const onBlur = () => {
     const value = parseFloat(price);
@@ -38,6 +31,13 @@ const NewTicket = () => {
 
     // Set price to round to 2 decimals
     setPrice(value.toFixed(2));
+  };
+
+  // handle form submission
+  const onSubmit = (event) => {
+    event.preventDefault();
+    // make a request to the server
+    doRequest();
   };
 
   return (
