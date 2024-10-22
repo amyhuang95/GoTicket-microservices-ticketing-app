@@ -1,4 +1,5 @@
 import useRequest from '../../hooks/use-request';
+import Router from 'next/router';
 
 // Display a ticket and a button to purchase it
 const TicketShow = ({ ticket }) => {
@@ -8,7 +9,8 @@ const TicketShow = ({ ticket }) => {
     body: {
       ticketId: ticket.id,
     },
-    onSuccess: (order) => console.log(order),
+    onSuccess: (order) =>
+      Router.push('/orders/[orderId]', `/orders/${order.id}`),
   });
   return (
     <div>
