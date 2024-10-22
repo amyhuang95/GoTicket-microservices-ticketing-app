@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 // Generate components with provided data
 const LandingPage = ({ currentUser, tickets }) => {
   // Helper function to build rows of tickets
@@ -6,6 +8,11 @@ const LandingPage = ({ currentUser, tickets }) => {
       <tr key={ticket.id}>
         <td>{ticket.title}</td>
         <td>{ticket.price}</td>
+        <td>
+          <Link href="/tickets/[ticketId]" as={`/tickets/${ticket.id}`}>
+            View
+          </Link>
+        </td>
       </tr>
     );
   });
@@ -19,6 +26,7 @@ const LandingPage = ({ currentUser, tickets }) => {
           <tr>
             <th>Title</th>
             <th>Price</th>
+            <th>Link</th>
           </tr>
         </thead>
         <tbody>{ticketList}</tbody>
