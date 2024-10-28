@@ -1,0 +1,16 @@
+# Name of the workflow
+name: tests
+
+# Trigger
+on: 
+  pull_request
+
+# Actions
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Get all codes from the project
+      - uses: actions/checkout@v2
+      # Run all tests in auth service
+      - run: cd auth && npm install && npm run test:ci
