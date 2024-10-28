@@ -65,3 +65,7 @@ The data mangement between each microservices is done using [NATS Streaming Serv
    skaffold dev
    ```
 6. Open your browser and go to `http://goticket.dev` to access the application.
+
+---
+
+Resource: [Microservices with Node JS and React](https://www.udemy.com/course/microservices-with-node-js-and-react/), Udemy.
